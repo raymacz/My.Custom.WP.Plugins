@@ -12,6 +12,19 @@
 *
 */
 
+/*
+ * general notes: 
+ * 1. Run Git Bash
+ * 2. cd /f/MyTutorials/MyWork/nodejs/MyCode
+ * 3. $ node server.js
+ * 4. check in browser url - http://127.0.0.1:1337/products.json
+ * 5. F:\MyTutorials\MyWork\nodejs\MyCode\server.js check fs.createReadStream("./jsonsample/products.json").pipe(response);	
+ * 6. check tweet_reset_time (in min.)
+ * 7. it should work!
+ * 
+ */
+
+
 
 //02 - The add_shortcode Method
 
@@ -184,13 +197,14 @@ function cache_meta($recent_tweets) {
 /// [twitter  username="myusername" show_tweets='true'] 
 
 add_shortcode('twitter', function($atts, $content){ 
-	//print_r($atts);die();
+	echo "shortcode enabled!";
+//        print_r($atts);die();
 	$atts = shortcode_atts(
 		array(
 			'username' => 'raymacz',
 			'content' => !empty($content) ? $content : 'Follow me now!!!',
 			'show_tweets' => false,
-			'tweet_reset_time' => 10,
+			'tweet_reset_time' => 1, // # of min
 			'num_tweets' => 8, // max of tweets to display
 		), $atts
 	);
@@ -240,7 +254,7 @@ function fetch_tweets($num_tweets, $username, $tweet_reset_time) {
 				/// implode - turns an array into individual string w/ separator
 				/// craet a fragment
 			//echo 'y: ';print_r($recent_tweets);die();
-			cache_meta($recent_tweets); 
+			cache_meta($recent_tweets); // add time & tweet to post meta
 		}
 		//print_r($recent_tweets);
 		return isset($recent_tweets[0][1]) ? $recent_tweets[0][1] : $recent_tweets[1]; // return the tweets <ul>

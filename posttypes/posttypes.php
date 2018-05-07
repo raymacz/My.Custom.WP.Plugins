@@ -32,24 +32,24 @@ along with {Plugin Name}. If not, see the Free Software Fondation, Inc.,
 
 function pstt_posttypes() {
 	/**
-	 * Post Type: Testimonials.  04_03-Building out an advanced custom post type
+	 * Post Type: Teztimonials.  04_03-Building out an advanced custom post type
 	 */
 
 	$labels = array(
-		"name" => __( "Testimonials", "boot2wp" ),
-		"singular_name" => __( "Testimonial", "boot2wp" ),
-		"menu_name" => __( "Testimonials", "boot2wp" ),
-		"name_admin_bar" => __( "Testimonial", "boot2wp" ),
+		"name" => __( "Teztimonials", "boot2wp" ),
+		"singular_name" => __( "Teztimonial", "boot2wp" ),
+		"menu_name" => __( "Teztimonials", "boot2wp" ),
+		"name_admin_bar" => __( "Teztimonial", "boot2wp" ),
 		"add_new" => __( "Add New" ),
-		"add_new_item" => __( "Add New Testimonial"),
-		"new_item" => __( "New Testimonial" ),
-		"edit_item" => __( "Edit Testimonial" ),
-		"view_item" => __( "View Testimonial" ),
-		"all_items" => __( "All Testimonials" ),
-		"search_items" => __( "Search Testimonials" ),
-		"parent_item_colon" => __( "Parent Testimonials:" ),
-		"not_found" => __( "No Testimonials Found." ),
-		"not_found_in_trash" => __( "New Testimonials found in Trash." ),
+		"add_new_item" => __( "Add New Teztimonial"),
+		"new_item" => __( "New Teztimonial" ),
+		"edit_item" => __( "Edit Teztimonial" ),
+		"view_item" => __( "View Teztimonial" ),
+		"all_items" => __( "All Teztimonials" ),
+		"search_items" => __( "Search Teztimonials" ),
+		"parent_item_colon" => __( "Parent Teztimonials:" ),
+		"not_found" => __( "No Teztimonials Found." ),
+		"not_found_in_trash" => __( "New Teztimonials found in Trash." ),
 	);
 
 	$args = array(
@@ -67,7 +67,7 @@ function pstt_posttypes() {
 		"capability_type" => "post",
 		"map_meta_cap" => true,
 		"hierarchical" => false,
-		"rewrite" => array( "slug" => "testimonial", "with_front" => true ),
+		"rewrite" => array( "slug" => "teztimonial", "with_front" => true ),
 		"query_var" => true,
 		// "menu_icon" => "http://127.0.0.1/wordpress/wp-content/uploads/2017/09/icon-features.png",
 		"menu_icon" => "dashicons-format-quote",
@@ -75,10 +75,10 @@ function pstt_posttypes() {
 		"supports" => array( "title", "editor", "thumbnail" ),
 	);
 
-	register_post_type( "testimonial", $args );
+	register_post_type( "teztimonial", $args );
 	
 	/**
-	 * Post Type: Testimonials.  04_03-Building out an advanced custom post type
+	 * Post Type: review.  
 	 */
 
 	$labels = array(
