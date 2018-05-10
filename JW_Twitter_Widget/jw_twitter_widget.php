@@ -20,11 +20,11 @@ Class JW_Twitter_Widget extends WP_Widget{
 	
 	function __construct() { //constructors method run immediately when its instantiated
 	
-		$options = array(
+		$widget_options = array(
 			'description' => 'Displays messages to readers',
 			'name' => 'Twitter Widget'
 		);
-		parent::__construct('JW_Twitter_Widget','', $options); // https://developer.wordpress.org/reference/classes/wp_widget/__construct/
+		parent::__construct('JW_Twitter_Widget','', $widget_options); // https://developer.wordpress.org/reference/classes/wp_widget/__construct/
 		
 	}	
 	
@@ -90,27 +90,22 @@ Class JW_Twitter_Widget extends WP_Widget{
 		//return $tweets;
 	}
 */
-
-///309 - Regular Expressions	
-	
+// title: any Twitter Username (products.json) // from  **06 - Registering the Twitter Widget** until **309 - Regular Expressions**	
 
 Class JW_Twitter_Widget extends WP_Widget{ 
-	
 	function __construct() { //constructors method run immediately when its instantiated
-	
-		$options = array(
+            
+		$widget_options = array(
 			'description' => 'Displays messages to readers',
 			'name' => 'Twitter Widget'
 		);
-		parent::__construct('JW_Twitter_Widget','', $options); // https://developer.wordpress.org/reference/classes/wp_widget/__construct/
-		
+		parent::__construct('JW_Twitter_Widget','', $widget_options); // https://developer.wordpress.org/reference/classes/wp_widget/__construct/
 	}	
 	
 	public function form($instance) { // https://developer.wordpress.org/reference/classes/wp_widget/form/ 
 		//print_r($instance); 
 		extract($instance); //extract from array to variable
 		?>
-		
 		<p>
 			<label for="<?php echo $this->get_field_id('title'); ?>"> Title: </label>		 <!--unique ID & no conflict -->
 			<input type="text" class="widefat" id="<?php echo $this->get_field_id('title'); ?>" 
@@ -130,9 +125,7 @@ Class JW_Twitter_Widget extends WP_Widget{
 				   min="1" max="10"				   
 				   value="<?php echo !empty($tweet_count) ? $tweet_count : 5; ?>" />  <!-- 5 is default if empty --> <!-- type="number" - html5 digit only -->
 		</p>
-		
 		<?php
-		
 	}
 	
 	public function widget($args, $instance) {//  https://developer.wordpress.org/reference/classes/wp_widget/widget/
@@ -140,7 +133,7 @@ Class JW_Twitter_Widget extends WP_Widget{
 		//print_r($instance); // displays the value inputted in the form
 		extract($args); // extract from array to variable
 		extract($instance);
-		
+                $title = apply_filters('widget_title',$title);
 		if (empty($title)) $title = 'Recent Tweets';
 		$data = $this->twitter($tweet_count, $username); // $data - cached data or new data 
 		//print_r($data);die();
@@ -149,7 +142,8 @@ Class JW_Twitter_Widget extends WP_Widget{
 			echo $before_title;
 				echo $title;
 			echo $after_title;
-			echo '<ul><li>'.implode('</li><li>', $data->tweets).'</li><ul>'; //implode -array into a string	 // turns foreach into a 1line
+//			echo '<ul><li>'.implode('</li><li>', $data->tweets).'</li><ul>'; //implode -array into a string	 // turns foreach into a 1line
+			echo '<ul class="'.apply_filters('widget_title', 'test-class').'"><li>'.implode('</li><li>', $data->tweets).'</li><ul>'; //implode -array into a string	 // turns foreach into a 1line
 		  echo $after_widget;	// $args
 		}
 	}	
@@ -157,10 +151,8 @@ Class JW_Twitter_Widget extends WP_Widget{
 	private function twitter($tweet_count, $username){
 		if (empty($username)) return false;
 		$tweets = get_transient('recent_tweets_widget'); //  WP Transients API - retrieve cached data from database
-		
 		if (!$tweets || $tweets->username !== $username || $tweets->tweet_count !== $tweet_count) {  // if there are any changes in the form then proceed with a new fetch
-		   // if none is cached in WP, fetch manualy from the API
-		  //echo $tweet_count;die();
+		  //echo $tweet_count;die(); // if none is cached in WP, fetch manualy from the API
 		  return $this->fetch_tweets($tweet_count, $username);
 		} 
 		return $tweets; // return data whether cached or new fetch
@@ -168,36 +160,33 @@ Class JW_Twitter_Widget extends WP_Widget{
 	
 	private function fetch_tweets($tweet_count, $username){
 		$tweets = wp_remote_get("http://127.0.0.1:1337/$username"); //WP function that gets json
-		if (isset($tweets->error)) return false; //moved here coz of wp error
+//               var_dump($tweets);    die();exit();
+		if (isset($tweets->errors)) return false; //moved here coz of wp error // json-decode will return error
 		$tweets = json_decode($tweets['body']); 
-		//if (isset($tweets->error)) return false; // json-decode will return error
-		
 		$tweets =$tweets->Object->results; 
-		//print_r($tweets);
-		
+//		print_r($tweets);die();
 		$data = new stdClass(); // create a new class $data
 		$data->username = $username;
 		$data->tweet_count = $tweet_count;
 		$data->tweets = array();
-		
 		foreach ($tweets as $tweet) {
 			if ($tweet_count-- === 0) break; //break out of the loop if the tweets has reach the max limit to display.
 				///$data[] = $tweet->Object->results[0]->text;	
 			$data->tweets[] = $this->filter_tweet($tweet->text);	//place all data into a new array ($data)
 		}
 		// cache in the database using WP transient
-		set_transient('recent_tweets_widget', $data, 60 * 5); // saved 5min in dtabase & will be deleted/expire following another request
+		set_transient('recent_tweets_widget', $data, 60 * 1); // saved 1min in database & will be deleted/expire following another request
 		//  WP Transients API - allows to set expiration dates. Cache by storing in the database
 		//recent_tweets_widget - ID associated int the database, $data - (username & tweet_count)
 		//print_r($data);die();
 		return $data;
-		
-		
 	}
 	
 	private function filter_tweet($tweet) {
-		$tweet = preg_replace('/(http[^\s]+)/im', '<a href="$1">$1</a>', $tweet); // replace urls with <a href>  (found in the string)
-		$tweet = preg_replace('/(@[^\s]+)/i', '<i> $1</i>', $tweet); // replace urls with <a href>  (found in the string)
+//		$tweet = preg_replace('/(http[^\s]+)/im', '<a href="$1">$1</a>', $tweet); // replace urls with <a href>  (found in the string)
+		$tweet = preg_replace('/((http|ftp|https):\/{2}[^\s]+)/im', '<a href="$1">$1</a>', $tweet); // replace urls with <a href>  (found in the string)
+		$tweet = preg_replace('/(@[^\s]+)/i', '<i> $1</i>', $tweet); // @ for username
+                // http://www.phpliveregex.com/ // https://www.functions-online.com/preg_replace.html
 		return $tweet;
 				/// /http/ - string of http
 				/// [^\s] - any character w/ no space
@@ -207,17 +196,17 @@ Class JW_Twitter_Widget extends WP_Widget{
 				/// e.g. http://test.mqsssit.ml
 				/// (wrapped) - $1   -->> wrapped with parentheses
 	}	
-	
-	
 }
 
-
-
-
 add_action('widgets_init', 'register_jw_twitter_widget');
-
 function register_jw_twitter_widget() {
 	register_widget('JW_Twitter_Widget'); // Messager Object Instance is passed.
 }	
+
+// justa a test: this class has changed the widget title & the class of <li> as a test for apply_filters
+add_filter('widget_title', function() {
+    return 'change-class';
+});
+
 
 ?>

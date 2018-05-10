@@ -12,7 +12,7 @@ error_reporting(E_ALL); //during developement, add this to help in making WP plu
 *
 */
 
-// 03 - The Skin for a Widget
+// from  **03 - The Skin for a Widget** until **06 - Registering the Twitter Widget**
 
 Class Messager extends WP_Widget{ 
 	
@@ -58,16 +58,17 @@ Class Messager extends WP_Widget{
 	public function widget($args, $instance) {//  https://developer.wordpress.org/reference/classes/wp_widget/widget/
 		//print_r($args); // prints the display value in a page or post  (e.g. before_title, widget_it, widget_name)
 		//print_r($instance); // displays the value inputted in the form
-		extract($args);
-		extract($instance);
+		extract($args); // how values should be displayed
+		extract($instance); // how values are inputted in the widget area
 		
 		// WP default filtering
 		$title = apply_filters('widget_title',$title);
 			 // - tip: $title = apply_filters('widget_title',$title); // widget_title can also be found in the WP Class Widget (e.g <H3 class="widget-title">
+                         // to know what $tag ('widget_title') for apply filters, try to inspect element the class.
 			 //https://developer.wordpress.org/reference/hooks/widget_title/
-		$description = apply_filters('widget_title',$description);
+//		$description = apply_filters('widget_title',$description);
 		
-		$title = apply_filters('widget_title', $title);
+//		$title = apply_filters('widget_title',$title);
 		$description = apply_filters('widget_description', $description);
 		
 		if (empty ($title)) $title  = 'Default Title'; // set default title if its empty
