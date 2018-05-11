@@ -15,77 +15,6 @@ if ( !defined('ABSPATH')) {
 	die;
 }
 
-
-class MyHeight {
-
-	public function top() {
-	  return apply_filters('top_text', 'This is the top!');	// apply_filters can be changed with add_filter
-	  //return 'This is the top!!!xyz';	
-	}	
-	
-	public function callbackz() {
-	  return 'changed!!!AAAAAz';
-	}
-
-	function abovve() {
-	  return 'This is the above!';	
-	  //return 'This is the top!!!xyz';	
-	}	
-
-	public static function bottom() {
-	 return 'This is the bottom!!!';	
-	}	
-
-	static function beneath() {
-	 return 'This is the beneath!!!';	
-	}	
-
-	public function executes() {
-		
-		echo '<br>';
-		echo '<br>';
-		echo '<pre>This is the middle '.self::beneath().'..</pre>';
-		echo '<pre>This is the middle this '.$this->abovve().'..</pre>';
-		
-	}	
-
-}
-
-
-
-
-$obj = new MyHeight;
-$obj->executes();
-
-
-add_action('in_the_middle_next', array('MyHeight','executes')); 
-
-
-//echo '<pre>'.$obj->top().' aaaaaaaaaaaaaaaaaaaaaaaaaaa</pre>';
-//echo '<pre>'.do_action('in_the_middle').'</pre>';
-//do_action('in_the_middle_next');
-echo MyHeight::bottom().'</pre>';
-//$obj->callbackz();
-
-
-function changetext() {
-	return 'hayzzzzzzzzzzzzzzx';
-}
-
-/*
-function adfilter() {
-	 //return add_filter('top_text', array('MyHeight','callbackz'));
-	 return 'crappppppppppppppp';
-}
-*/
-
-add_filter('top_text','changetext'); // callback function 	// apply_filters can be changed with add_filter
-add_filter('top_text', array($obj, 'callbackz'));	 // overwrites filter from above and executes callback function
-
-echo '<pre>bbbzzz '.$obj->top().'</pre>';
-
-
-
 function cwpl_login_stylesheet() {
 	//register & load to queue the new added stylesheet
 	wp_register_style('cwpl_custom_stylesheet', plugin_dir_url( __FILE__ ).'css/login-style.css');
@@ -107,7 +36,6 @@ function cwpl_login_error_msg($errors) {
 	//add_filter( 'login_errors', _return_null); // you can return w/ no messages
  //}
  
- 
 // removes the javascript shake in login page	
 function remove_shake() {
  if (has_action( 'login_head', 'wp_shake_js')) :	
@@ -121,20 +49,13 @@ function something() {
   echo '<pre>This is the middle something..</pre>';	
 }
 
-
 add_action('in_the_middle', 'something'); // - note (very IMPORTANT): add_action() should be first before do_action() unlike apply_filters() & add_filter();
 //add_action('in_the_middle_next', array('MyHeight','executes')); 
-
-///
-
-
 
 //echo '<pre>'.do_action('in_the_middle').'</pre>';
 do_action('in_the_middle');
 
-
 // #24 Setting up the folder and file structure single-post-content-plus.php ----------------
-
 function cwpl_login_stylesheet24() {
 	//let other developers add a filter to load/unload the styles #27 Applying filters for loading stylesheets
 	if (apply_filters('cwpl_load_stylez', true)) {
@@ -151,7 +72,6 @@ add_filter('cwpl_load_stylez', '__return_true');
 
 //register & load to queue the newly added stylesheet (not login stylesheet)
 add_action('wp_enqueue_scripts','cwpl_login_stylesheet24');
-
 
 // #25 Registering a sidebar
 function cwpl_register_sidebar() {
@@ -170,11 +90,9 @@ function cwpl_register_sidebar() {
 
 add_action('widgets_init', 'cwpl_register_sidebar');
 
-
 //NOTE::: #26 Displaying a sidebar on SINGLE POST 
 function cwpl_display_sidebar( $content ) {
  //display sidebar
-  
   
   if ( is_active_sidebar('cwpl_sidebar') && is_single() && in_the_loop() && is_main_query() ) {
 	$content = $content."testme ";
@@ -203,26 +121,23 @@ add_action('wp_footer', function () { // fires when footer is displayed
 	echo 'hello from footer'; 
 });
 
-
-
 add_action('comment_post', function () { // fires when a user post a comment
 	echo 'hello from comment'; 
 	$email = get_bloginfo('admin_email'); // returng/gets the admin email
 	wp_mail($email, 'Subject: New Comment Posted', 'Message: A new comment has been posted!'); //sends email to admin
 });
 
-
 add_filter('the_content', function($content) {
 	if (!singular_post('post')) {
 		return $content;
 	}		
+	$id = get_the_ID();
 	$terms = get_the_terms($id, 'category'); // gets all the terms of a particular post
 	$cats = array();
 	//print_r($terms);
 	foreach($terms as $term) {
 		$cats[] = $term->cat_ID; // https://www.screencast.com/t/FmcXJNoS
 	}
-	
 	$loop= new WP_Query(
 		array(	
 			'posts_per_page' => 3,  

@@ -84,6 +84,13 @@ class MyHeight {
 		do_action('in_the_middle_next_action');
 	}
 
+        public static function funcstatic($param) {
+            return $param.' method!!!';
+        }
+        
+        public function getstatic() {
+            echo "from an INSTANCE method to a".self::funcstatic('STATIC');
+        }
 }
 
 
@@ -97,7 +104,7 @@ do_action('in_the_middle_next_action'); // executes both using Class & direct ca
 $obj->executes_do();
 
 //echo '<pre>'.$obj->top().' aaaaaaaaaaaaaaaaaaaaaaaaaaa</pre>';
-//echo '<pre>'.do_action('in_the_middle').'</pre>';
+
 
 echo MyHeight::bottom().'</pre>';
 //$obj->callbackz();
@@ -118,113 +125,6 @@ add_filter('top_text','changetext'); // 'hayzzzzzzzzzzzzzz'
 add_filter('top_text', array($obj, 'callbackz')); // 'x changed!!!AAAAA'
 
 echo '<pre>bbbzzz '.$obj->top().'</pre>';
-
-
-
-function aafh_login_stylesheet() {
-	//register & load to queue the new added stylesheet
-	wp_register_style('aafh_custom_stylesheet', plugin_dir_url( __FILE__ ).'css/login-style.css');
-	wp_enqueue_style('aafh_custom_stylesheet');
-
-}
-
-// hook the function before the scripts are loaded in WP login page
-add_action('login_enqueue_scripts', 'aafh_login_stylesheet');
-
-
-function aafh_login_error_msg($errors) {
-	//override errors
-	return  'Invalid Credentials';
-}
-
- //if (has_filters('login_errors', 'aafh_check_error')) {
-	add_filter( 'login_errors', 'aafh_login_error_msg', 1);
-	//add_filter( 'login_errors', _return_null); // you can return w/ no messages
- //}
-
-
-// removes the javascript shake in login page
-function remove_shake() {
- if (has_action( 'login_head', 'wp_shake_js')) :
-	remove_action('login_head', 'wp_shake_js', 12 );
- endif;
-}
-add_action('login_head', 'remove_shake');
-
-function something() {
-   //return 'This is the middle..';	 // - note: a function with RETURN won't work in do_action() / add_action()
-  echo '<pre>This is the middle something..zz</pre>';
-}
-
-
-add_action('in_the_middle', 'something'); // - note (very IMPORTANT): add_action() should be first before do_action() unlike apply_filters() & add_filter();
-//add_action('in_the_middle_next_action', array('MyHeight','executes'));
-
-///
-
-
-
-//echo '<pre>'.do_action('in_the_middle').'</pre>';
-do_action('in_the_middle');
-
-
-// #24 Setting up the folder and file structure single-post-content-plus.php ----------------
-
-function aafh_login_stylesheet24() {
-	//let other developers add a filter to load/unload the styles #27 Applying filters for loading stylesheets
-	if (apply_filters('aafh_load_stylez', true)) {
-		//register & load to queue the newly added stylesheet
-		if ( is_single() && is_main_query() ) { // styles only applied only on single post
-			wp_enqueue_style('aafh_custom_stylesheet24', plugin_dir_url( __FILE__ ).'css/login-style24.css');
-		}
-	}
-}
-
-// whether to load plugin styles #27 Applying filters for loading stylesheets
-add_filter('aafh_load_stylez', '__return_true');
-//add_filter('aafh_load_stylez', '__return_false');
-
-//register & load to queue the newly added stylesheet (not login stylesheet)
-add_action('wp_enqueue_scripts','aafh_login_stylesheet24');
-
-
-// #25 Registering a sidebar
-function aafh_register_sidebar() {
-	//register & load to queue the new added stylesheet
-	register_sidebar ( array(
-		'name'          => esc_html__( 'Post Content Plus', 'boot2wp' ),
-		'id'            => 'aafh_sidebar',
-		'description'   => esc_html__( 'Add widgets here.', 'boot2wp' ),
-		'before_widget' => '<section id="%1$s" class="widget %2$s aafh-sidebar">',
-		'after_widget'  => '</section>',
-		'before_title'  => '<h3 class="widget-title aafh-title">',
-		'after_title'   => '</h3>',
-
-	));
-}
-
-add_action('widgets_init', 'aafh_register_sidebar');
-
-
-//NOTE::: #26 Displaying a sidebar on SINGLE POST
-function aafh_display_sidebar( $content ) {
- //display sidebar
-
-
-  if ( is_active_sidebar('aafh_sidebar') && is_single() && in_the_loop() && is_main_query() ) {
-	$content = $content."testme ";
-	dynamic_sidebar('aafh_sidebar');
-    return $content . "I'm filtering the content inside the main loop";
-  }
-
- return $content;
-}
-
-//display sidebar on single post
-add_filter('the_content', 'aafh_display_sidebar');
-
-
-
 
 
 
