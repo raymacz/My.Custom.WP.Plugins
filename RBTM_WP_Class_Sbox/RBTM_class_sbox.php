@@ -1,11 +1,11 @@
 <?php
 /**
-* Plugin Name: Action & Filter Hooks
-* Description: Sandbox for Action & Filter Hooks
+* Plugin Name: WP Class Sandbox
+* Description: Sandbox for Wordpress Classes API
 * Version: 0.1.0
 * Author: Raymacz
-* Author URI: http:mqassist.com
-* Text Domain: aafh
+* Author URI: http:webmacz.ml
+* Text Domain: rbtm
 * License: GPL2+
 *
 */

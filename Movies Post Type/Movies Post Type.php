@@ -12,7 +12,6 @@ error_reporting(E_ALL); //during developement, add this to help in making WP plu
 *
 */
 
-
 class JW_Movies_Post_Type {
 	
 	public function __construct()
@@ -36,9 +35,9 @@ class JW_Movies_Post_Type {
 				'search_items' => 'Search Movies',
 				'not_found' => 'No Movies Found',
 				'not_found_in_trash' => 'No Movies Found in Trash',
-				
 			),
-			'query_var' => 'movies',
+//			'query_var' => 'movies',
+			'query_var' => false,
 			'rewrite' => array(
 				'slug' => 'movies',
 				//'slug' => 'movies/',
@@ -55,11 +54,8 @@ class JW_Movies_Post_Type {
 				//'editor',
 			)
 		);
-	/*	echo "<pre>";
-			print_r($args);
-		echo "</pre>"; */
+	/*	echo "<pre>";	print_r($args);	echo "</pre>"; */
 		register_post_type('jw_movie', $args); 
-		
 	}
 	
 	public function taxonomies()
@@ -68,13 +64,15 @@ class JW_Movies_Post_Type {
 			// genre examples: Science Fiction, Comedy, Drama, Horror, Romance
 		$taxonomies['genre'] = array( // genre taxonomies, we can also add actors
 			'hierarchical' => true,  // if it can have parent items
-			'query_var' => 'movie_genre', 
+//			'query_var' => 'movie_genre', 
+			'query_var' => true, 
 			'rewrite' => array(
-				'slug' => 'movies/genre',
+//				'slug' => 'movies/genre',
+				'slug' => 'genre',
 			),
 			'labels' => array( // labels to display
-				'name' => 'Genres',
-				'singular_name' => 'Genre',
+                                'name' => 'Genres',
+                                'singular_name' => 'Genre',
 				'edit_item' => 'Edit Genre',
 				'update_item' => 'Update Genre',
 				'add_new_item' => 'Add New Genre Item',
@@ -82,19 +80,23 @@ class JW_Movies_Post_Type {
 				'all_items' => 'All Genres',
 				'search_items' => 'Search Genres',
 				'popular_items' => 'Popular Genres',
-				'separate_items_with_comments' => 'Separate Genres with commas',
+				'separate_items_with_commas' => 'Separate Genres with commas',
 				'add_or_remove_items' => 'add or remove genres',
 				'choose_from_most_used' => 'Choose from most used genres',
 			),
+                        'show_ui'           => true,
+                        'show_admin_column' => true,
 		); // studio examples: Warner Brothers, Imagine, Marvel Studios, Disney Studios
 		$taxonomies['studio'] = array( // genre studio, we can also add actors
 			'hierarchical' => true,  // if it can have parent items
-			'query_var' => 'movie_studio', 
+//			'query_var' => 'movie_studio', 
+			'query_var' => true, 
 			'rewrite' => array(
-				'slug' => 'movies/studios',
+//				'slug' => 'movies/studios',
+				'slug' => 'studios',
 			),
 			'labels' => array( // labels to display
-				'name' => 'Studios',
+                            'name' => 'Studios',
 				'singular_name' => 'Studio',
 				'edit_item' => 'Edit Studio',
 				'update_item' => 'Update Studio',
@@ -103,14 +105,15 @@ class JW_Movies_Post_Type {
 				'all_items' => 'All Studios',
 				'search_items' => 'Search Studios',
 				'popular_items' => 'Popular Studios',
-				'separate_items_with_comments' => 'Separate Studios with commas',
+				'separate_items_with_commas' => 'Separate Studios with commas',
 				'add_or_remove_items' => 'add or remove Studios',
 				'choose_from_most_used' => 'Choose from most used Studios',
 			),
+                        'show_ui'           => true,
+                        'show_admin_column' => true,
 		);	
 		
 		$this->register_all_taxonomies($taxonomies);
-		
 	}
 
 	public function register_all_taxonomies($taxonomies) // pair taxonomies w/ main post
@@ -125,8 +128,7 @@ class JW_Movies_Post_Type {
 	{
 		add_action('add_meta_boxes', function() {	
 			// css id, title, cb, assoc. post type/page, priority lvl, cb arg.
-			add_meta_box('jw_movie_length', 'Movie Length', 'movie_length', 'jw_movie'); // add new metabox to the post type
-			
+			add_meta_box('jw_movie_length', 'Movie Length', 'movie_length', 'jw_movie'); // add new metabox to the post type // $screen could be any post type
 		});	
 			
 		function movie_length($post) {
@@ -136,7 +138,6 @@ class JW_Movies_Post_Type {
 			<p>
 				<label for="jw_movie_length"> Length: </label>
 				<input type="text" class= "widefat" name="jw_movie_length" id="jw_movie_length" value="<?php echo esc_attr($length);?>" />
-			
 			</p>				
 			<?php	
 		}
@@ -146,17 +147,12 @@ class JW_Movies_Post_Type {
 				update_post_meta( $id, 'jw_movie_length', strip_tags($_POST['jw_movie_length']) );
 			}
 		});
-			
-		
 	}
 }
-
 
 add_action('init', function() {
 	new JW_Movies_Post_Type();
 	include dirname(__FILE__).'/movies_post_type_shortcode.php';
 });
-
-
 
 ?>
