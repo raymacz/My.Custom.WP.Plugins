@@ -100,8 +100,8 @@ function pstt_posttypes() {
     
     $args = array(
         'labels'             => $labels,
-        'public'             => true,
-        'publicly_queryable' => true,
+        'public'             => true, // 404 page on front-end if link is accessed
+        'publicly_queryable' => true, // contents cannot be searched 
         'show_ui'            => true,
         'show_in_menu'       => true,
         'query_var'          => true,
@@ -109,15 +109,17 @@ function pstt_posttypes() {
         'capability_type'    => 'post',
         'has_archive'        => true,
         'hierarchical'       => false,
+		'show-in-rest'		 => true,
+		'rest_base'			 => 'reviews' //base route for rest api
         'menu_position'      => 5,
-        'menu_icon'          => 'dashicons-star-half',
+        'menu_icon'          => 'dashicons-star-half', 
         'supports'           => array( 'title', 'editor', 'author', 'thumbnail', 'excerpt', 'comments' ),
         'taxonomies'         => array( 'category', 'post_tag' )
     );
     register_post_type( 'review', $args );
 }
 
-add_action('init', 'pstt_posttypes');	
+add_action('init', 'pstt_posttypes');	// this calls 2 funtions, rewrite flush & register post type function
 
 
 function my_rewrite_flush() {
@@ -125,12 +127,12 @@ function my_rewrite_flush() {
     // Note: "add" is written with quotes, as CPTs don't get added to the DB,
     // They are only referenced in the post_type column with a post entry, 
     // when you add a post of this CPT.
-    pstt_posttypes(); // my_cpt_init(); // rbtm
+    pstt_posttypes(); // this means you
     // ATTENTION: This is *only* done during plugin activation hook in this example!
     // You should *NEVER EVER* do this on every page load!!
     flush_rewrite_rules();
 }
-register_activation_hook( __FILE__, 'my_rewrite_flush' );
+register_activation_hook( __FILE__, 'my_rewrite_flush' ); // this makes permalinks work properly
 
 
 function pstt_mycustom_taxonomies() {  
