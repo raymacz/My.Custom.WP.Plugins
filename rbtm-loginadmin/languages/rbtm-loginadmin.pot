@@ -1,0 +1,44 @@
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Rbtm Login Admin\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2018-12-14 19:11+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: \n"
+"Language: \n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Loco https://localise.biz/\n"
+"X-Loco-Version: 2.2.0; wp-5.0.1"
+
+#. Description of the plugin
+msgid "a way to add customization to WP admin & WP login."
+msgstr ""
+
+#. Author URI of the plugin
+msgid "http://webmacz.cf"
+msgstr ""
+
+#: rbtm-loginadmin.php:47
+msgid "My custom message"
+msgstr ""
+
+#: rbtm-loginadmin.php:45
+msgid "Powered by Wordpress"
+msgstr ""
+
+#. Author of the plugin
+msgid "Raymacz"
+msgstr ""
+
+#. Name of the plugin
+msgid "Rbtm Login Admin"
+msgstr ""
+
+#: rbtm-loginadmin.php:48
+msgid "Special message for users"
+msgstr ""
